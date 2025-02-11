@@ -22,15 +22,11 @@ class SpotifyAIRecommender:
             )
         )
         # Initialize Anthropic client with the latest API version
-        self.claude_client: Anthropic = Anthropic(
-            api_key=os.getenv("ANTHROPIC_API_KEY")
-        )
+        self.claude_client: Anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     def get_top_artists(self, limit: int = 20) -> List[Tuple[str, List[str]]]:
         """Get user's top artists"""
-        results: Dict[str, Any] = self.sp.current_user_top_artists(
-            limit=limit, time_range="medium_term"
-        )
+        results: Dict[str, Any] = self.sp.current_user_top_artists(limit=limit, time_range="medium_term")
         return [(item["name"], item["genres"]) for item in results["items"]]
 
     def get_artist_features(self, artist_id: str) -> Dict[str, Any]:
@@ -43,15 +39,11 @@ class SpotifyAIRecommender:
             "followers": artist["followers"]["total"],
         }
 
-    def generate_ai_recommendations(
-        self, top_artists: List[Tuple[str, List[str]]]
-    ) -> List[str]:
+    def generate_ai_recommendations(self, top_artists: List[Tuple[str, List[str]]]) -> List[str]:
         """Generate AI-powered recommendations based on user's top artists"""
         # Create a prompt for the AI
         artists_str: str = ", ".join([artist[0] for artist in top_artists[:5]])
-        genres_str: str = ", ".join(
-            set([genre for _, genres in top_artists for genre in genres])
-        )
+        genres_str: str = ", ".join(set([genre for _, genres in top_artists for genre in genres]))
         prompt: str = (
             """Based on the user's top artists: {}
 And their preferred genres: {}
@@ -76,14 +68,10 @@ Format your response as a comma-separated list of artist names only.""".format(
         if not message.content:
             return []
         content = message.content[0]
-        recommendations: str = (
-            content.text if hasattr(content, "text") else str(content)
-        )
+        recommendations: str = content.text if hasattr(content, "text") else str(content)
         return recommendations.strip().split(", ")
 
-    def search_recommended_artists(
-        self, artist_names: List[str]
-    ) -> List[Dict[str, Any]]:
+    def search_recommended_artists(self, artist_names: List[str]) -> List[Dict[str, Any]]:
         """Search for recommended artists on Spotify"""
         recommendations: List[Dict[str, Any]] = []
         for name in artist_names:
@@ -114,9 +102,7 @@ def main() -> None:
 
     # Search for recommended artists on Spotify
     print("\nFinding detailed information about recommendations...")
-    recommendations: List[Dict[str, Any]] = recommender.search_recommended_artists(
-        ai_suggestions
-    )
+    recommendations: List[Dict[str, Any]] = recommender.search_recommended_artists(ai_suggestions)
 
     # Display recommendations
     print("\nRecommended Artists:")
