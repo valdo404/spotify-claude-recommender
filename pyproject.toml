@@ -1,0 +1,66 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spotify-claude-recommender"
+version = "0.1.0"
+authors = [
+    { name="Laurent Valdes", email="valderama@gmail.com" },
+]
+description = "AI-powered music recommendations using Spotify and Claude"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "spotipy",
+    "anthropic",
+    "python-dotenv",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/valdo404/spotify-claude-recommender"
+"Bug Tracker" = "https://github.com/valdo404/spotify-claude-recommender/issues"
+
+[project.scripts]
+spotify-recommend = "spotify_recommender.main:main"
+
+[tool.black]
+line-length = 127
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 127
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = "spotipy.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "anthropic.*"
+ignore_missing_imports = true
