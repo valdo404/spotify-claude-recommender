@@ -24,24 +24,19 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install hatch
+        pip install .[dev]
         
     - name: Type check with mypy
-      run: |
-        mypy main.py
+      run: mypy spotify_recommender/
         
     - name: Lint with flake8
       run: |
-        pip install flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
     - name: Check imports with isort
-      run: |
-        pip install isort
-        isort . --check-only --diff
+      run: isort . --check-only --diff
         
     - name: Check formatting with black
-      run: |
-        pip install black
-        black . --check
+      run: black . --check

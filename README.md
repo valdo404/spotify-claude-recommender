@@ -26,14 +26,27 @@ This application connects to your Spotify account and uses Anthropic's Claude AI
    SPOTIFY_CLIENT_SECRET=your_client_secret
    ANTHROPIC_API_KEY=your_anthropic_api_key
    ```
-4. Install dependencies:
+4. Install the package in development mode:
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
    ```
+
+## Installation
+
+You can install the package globally using pip:
+
+```bash
+pip install git+https://github.com/valdo404/spotify-claude-recommender.git
+```
 
 ## Usage
 
-Run the main script:
+After installation, you can run the tool from anywhere using:
+```bash
+spotify-recommend
+```
+
+Or run directly from the source:
 ```bash
 python main.py
 ```
@@ -53,9 +66,15 @@ This project uses several tools to maintain code quality:
 - `black` for code formatting
 - `isort` for import sorting
 
+All tool configurations are managed in `pyproject.toml`. To set up the development environment:
+
+```bash
+pip install -e ".[dev]"
+```
+
 Run the checks locally:
 ```bash
-mypy main.py
+mypy spotify_recommender/
 flake8 .
 black . --check
 isort . --check-only
