@@ -59,7 +59,10 @@ class SpotifyAIRecommender:
         )
         
         # Extract the text content from the response
-        recommendations: str = message.content[0].text
+        if not message.content:
+            return []
+        content = message.content[0]
+        recommendations: str = content.text if hasattr(content, 'text') else str(content)
         return recommendations.strip().split(", ")
 
     def search_recommended_artists(self, artist_names: List[str]) -> List[Dict[str, Any]]:
