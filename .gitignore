@@ -1,6 +1,22 @@
+# Environment variables and secrets
 .env
+
+# Python
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+*$py.class
+.Python
 venv/
+env/
+
+# Spotify cache
+.cache
+
+# IDE
 .idea/
+.vscode/
+
+# OS
+.DS_Store
+*.swp
+.*.swp
