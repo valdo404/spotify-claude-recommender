@@ -1,7 +1,7 @@
 import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-from openai import OpenAI
+from anthropic import Anthropic
 from dotenv import load_dotenv
 import pandas as pd
 
@@ -18,8 +18,8 @@ class SpotifyAIRecommender:
             scope='user-top-read user-library-read playlist-modify-public'
         ))
         
-        # Initialize OpenAI client
-        self.openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        # Initialize Anthropic client with the latest API version
+        self.claude_client = Anthropic(api_key=os.getenv('ANTHROPIC_API_KEY'))
 
     def get_top_artists(self, limit=20):
         """Get user's top artists"""
@@ -47,16 +47,19 @@ class SpotifyAIRecommender:
         Suggest 5 new artists they might enjoy. Consider musical style, genre, and artistic influence.
         Format your response as a comma-separated list of artist names only."""
 
-        # Get AI recommendations
-        response = self.openai_client.chat.completions.create(
-            model="gpt-3.5-turbo",
+        # Get AI recommendations using the Messages API
+        message = self.claude_client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=1024,
+            system="You are a music recommendation expert. Your responses should only contain a comma-separated list of 5 artist names.",
             messages=[
-                {"role": "system", "content": "You are a music recommendation expert."},
                 {"role": "user", "content": prompt}
             ]
         )
         
-        return response.choices[0].message.content.strip().split(", ")
+        # Extract the text content from the response
+        recommendations = message.content[0].text
+        return recommendations.strip().split(", ")
 
     def search_recommended_artists(self, artist_names):
         """Search for recommended artists on Spotify"""
